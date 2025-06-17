@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medellín vai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ececec 0%, #fffeff 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: rgb(255, 255, 255);
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(202, 53, 53, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .plan-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+        }
+
+        .plan-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .plan-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(145deg, #ffffff, #ffffff);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .plan-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .plan-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .plan-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0ae73e;
+            margin-top: 10px;
+        }
+
+        .plan-card.selected .plan-price {
+            color: #fff;
+        }
+
+        .profile-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .recommendation-item {
+            background: rgba(255,255,255,0.9);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-section {
+            background: #fff3cd;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #ffc107;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .cart-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #28a745;
+            text-align: right;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #28a745;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .match-section {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .match-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .weather-info {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab-btn {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌄 Medellín Vibe</h1>
+            <p>Descubre, conecta y disfruta la ciudad de la eterna primavera</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('planes')">📋 Planes</button>
+            <button class="tab-btn" onclick="showTab('perfil')">👤 Mi Perfil</button>
+            <button class="tab-btn" onclick="showTab('conectar')">🤝 Conectar</button>
+            <button class="tab-btn" onclick="showTab('carrito')">🛒 Mi Carrito</button>
+        </div>
+        <div id="planes" class="tab-content active">
+            <h2>🎯 Planes Prediseñados</h2>
+            
+            <div class="weather-info">
+                <strong>🌤️ Clima actual en Medellín:</strong> <span id="weather">Cargando...</span>
+            </div>
+
+            <div class="plans-grid">
+                <div class="plan-card" onclick="selectPlan('saludas', 45000)" data-plan="saludas">
+                    <div class="plan-title">
+                        <span class="plan-icon">🥗</span>
+                        Saludas Gourmet
+                    </div>
+                    <p>Descubre los mejores restaurantes saludables de Medellín con guía local.</p>
+                    <div class="plan-price">$45,000 COP</div>
+                </div>
+
+                <div class="plan-card" onclick="selectPlan('excursiones', 85000)" data-plan="excursiones">
+                    <div class="plan-title">
+                        <span class="plan-icon">🏔️</span>
+                        Excursiones Naturales
+                    </div>
+                    <p>Aventuras a lugares icónicos: Guatapé, Piedra del Peñol, pueblos cercanos.</p>
+                    <div class="plan-price">$85,000 COP</div>
+                </div>
+
+                <div class="plan-card" onclick="selectPlan('senderismo', 35000)" data-plan="senderismo">
+                    <div class="plan-title">
+                        <span class="plan-icon">🥾</span>
+                        Senderismo Urbano
+                    </div>
+                    <p>Rutas ecológicas por cerros tutelares y parques naturales de la ciudad.</p>
+                    <div class="plan-price">$35,000 COP</div>
+                </div>
+
+                <div class="plan-card" onclick="selectPlan('cine-aire', 25000)" data-plan="cine-aire">
+                    <div class="plan-title">
+                        <span class="plan-icon">🎬</span>
+                        Cine al Aire Libre
+                    </div>
+                    <p>Noches de película bajo las estrellas en espacios únicos de la ciudad.</p>
+                    <div class="plan-price">$25,000 COP</div>
+                </div>
+
+                <div class="plan-card" onclick="selectPlan('cine-clasico', 30000)" data-plan="cine-clasico">
+                    <div class="plan-title">
+                        <span class="plan-icon">🎭</span>
+                        Cine Clásico
+                    </div>
+                    <p>Sesiones especiales de películas clásicas en teatros históricos.</p>
+                    <div class="plan-price">$30,000 COP</div>
+                </div>
+
+                <div class="plan-card" onclick="selectPlan('cicloruta', 20000)" data-plan="cicloruta">
+                    <div class="plan-title">
+                        <span class="plan-icon">🚴</span>
+                        Cicloruta Temática
+                    </div>
+                    <p>Recorridos en bicicleta por la ciudad con paradas culturales y gastronómicas.</p>
+                    <div class="plan-price">$20,000 COP</div>
+                </div>
+
+                <div class="plan-card" onclick="selectPlan('picnic-ceramica', 40000)" data-plan="picnic-ceramica">
+                    <div class="plan-title">
+                        <span class="plan-icon">🎨</span>
+                        Picnic + Cerámica
+                    </div>
+                    <p>Tarde de picnic combinada con taller de pintura en cerámica.</p>
+                    <div class="plan-price">$40,000 COP</div>
+                </div>
+
+                <div class="plan-card" onclick="selectPlan('slackline', 55000)" data-plan="slackline">
+                    <div class="plan-title">
+                        <span class="plan-icon">🏃</span>
+                        Slackline & Equilibrio
+                    </div>
+                    <p>Aprende slackline en parques con instructores expertos y equipo incluido.</p>
+                    <div class="plan-price">$55,000 COP</div>
+                </div>
+            </div>
+
+            <div class="recommendations">
+                <h3>💡 Recomendaciones Personalizadas</h3>
+                <div id="recommendations-list">
+                    <div class="recommendation-item">
+                        <span>🌤️ Perfecto para senderismo - clima despejado</span>
+                        <strong>Recomendado hoy</strong>
+                    </div>
+                    <div class="recommendation-item">
+                        <span>🎨 Actividades creativas - ideal para tarde lluviosa</span>
+                        <strong>Plan B</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Mi Perfil -->
+        <div id="perfil" class="tab-content">
+            <h2>👤 Configura tu Perfil</h2>
+            
+            <div class="profile-section">
+                <h3>Información Personal</h3>
+                <div class="profile-grid">
+                    <div class="form-group">
+                        <label for="origen">Origen:</label>
+                        <select id="origen" onchange="updateRecommendations()">
+                            <option value="extranjero">Extranjero</option>
+                            <option value="nativo">Nativo de Medellín</option>
+                            <option value="nacional">Colombiano (otra ciudad)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="intereses">Intereses Principales:</label>
+                        <select id="intereses" onchange="updateRecommendations()">
+                            <option value="aventura">Aventura y Deportes</option>
+                            <option value="cultura">Cultura y Arte</option>
+                            <option value="gastronomia">Gastronomía</option>
+                            <option value="naturaleza">Naturaleza</option>
+                            <option value="social">Socializar</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="presupuesto">Presupuesto Preferido:</label>
+                        <select id="presupuesto" onchange="updateRecommendations()">
+                            <option value="bajo">$15,000 - $35,000</option>
+                            <option value="medio">$35,000 - $60,000</option>
+                            <option value="alto">$60,000 - $100,000+</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tiempo">Tiempo Disponible:</label>
+                        <select id="tiempo" onchange="updateRecommendations()">
+                            <option value="corto">2-4 horas</option>
+                            <option value="medio">Medio día</option>
+                            <option value="completo">Día completo</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="updateRecommendations()">🔄 Actualizar Recomendaciones</button>
+            </div>
+        </div>
+
+        <!-- Tab: Conectar Personas -->
+        <div id="conectar" class="tab-content">
+            <h2>🤝 Conecta con Personas Afines</h2>
+            
+            <div class="match-section">
+                <h3>👥 Personas con Intereses Similares</h3>
+                <div id="matches-list">
+                    <div class="match-card">
+                        <div>
+                            <strong>🇫🇷 Marie (Francia)</strong><br>
+                            <small>Intereses: Senderismo, Fotografía</small>
+                        </div>
+                        <button class="btn">💬 Conectar</button>
+                    </div>
+                    
+                    <div class="match-card">
+                        <div>
+                            <strong>🇨🇴 Carlos (Medellín)</strong><br>
+                            <small>Intereses: Ciclismo, Cultura Local</small>
+                        </div>
+                        <button class="btn">💬 Conectar</button>
+                    </div>
+                    
+                    <div class="match-card">
+                        <div>
+                            <strong>🇩🇪 Hans (Alemania)</strong><br>
+                            <small>Intereses: Arte, Gastronomía</small>
+                        </div>
+                        <button class="btn">💬 Conectar</button>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="findMoreMatches()">🔍 Buscar Más Personas</button>
+            </div>
+        </div>
+
+        <!-- Tab: Mi Carrito -->
+        <div id="carrito" class="tab-content">
+            <h2>🛒 Mi Carrito de Experiencias</h2>
+            
+            <div class="cart-section">
+                <div id="cart-items">
+                    <p style="text-align: center; color: #666; padding: 20px;">
+                        Tu carrito está vacío. ¡Selecciona algunos planes para comenzar tu aventura!
+                    </p>
+                </div>
+                
+                <div class="cart-total" id="cart-total" style="display: none;">
+                    Total: $0 COP
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" onclick="clearCart()">🗑️ Vaciar Carrito</button>
+                    <button class="btn" onclick="checkout()" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                        💳 Proceder al Pago
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let selectedPlans = new Set();
+
+        // Simular información del clima
+        document.getElementById('weather').textContent = '26°C, Parcialmente nublado - Ideal para actividades al aire libre';
+
+        function showTab(tabName) {
+            // Ocultar todas las pestañas
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Mostrar la pestaña seleccionada
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function selectPlan(planName, price) {
+            const planCard = document.querySelector(`[data-plan="${planName}"]`);
+            
+            if (selectedPlans.has(planName)) {
+                // Deseleccionar
+                selectedPlans.delete(planName);
+                planCard.classList.remove('selected');
+                removeFromCart(planName);
+            } else {
+                // Seleccionar
+                selectedPlans.add(planName);
+                planCard.classList.add('selected');
+                addToCart(planName, price);
+            }
+        }
+
+        function addToCart(planName, price) {
+            const planNames = {
+                'saludas': 'Saludas Gourmet',
+                'excursiones': 'Excursiones Naturales',
+                'senderismo': 'Senderismo Urbano',
+                'cine-aire': 'Cine al Aire Libre',
+                'cine-clasico': 'Cine Clásico',
+                'cicloruta': 'Cicloruta Temática',
+                'picnic-ceramica': 'Picnic + Cerámica',
+                'slackline': 'Slackline & Equilibrio'
+            };
+
+            cart.push({
+                id: planName,
+                name: planNames[planName],
+                price: price
+            });
+
+            updateCartDisplay();
+        }
+
+        function removeFromCart(planName) {
+            cart = cart.filter(item => item.id !== planName);
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <p style="text-align: center; color: #666; padding: 20px;">
+                        Tu carrito está vacío. ¡Selecciona algunos planes para comenzar tu aventura!
+                    </p>
+                `;
+                cartTotal.style.display = 'none';
+                return;
+            }
+
+            let total = 0;
+            let itemsHTML = '';
+
+            cart.forEach(item => {
+                total += item.price;
+                itemsHTML += `
+                    <div class="cart-item">
+                        <span>${item.name}</span>
+                        <span>$${item.price.toLocaleString()} COP</span>
+                    </div>
+                `;
+            });
+
+            cartItems.innerHTML = itemsHTML;
+            cartTotal.innerHTML = `Total: $${total.toLocaleString()} COP`;
+            cartTotal.style.display = 'block';
+        }
+
+        function clearCart() {
+            cart = [];
+            selectedPlans.clear();
+            
+            // Deseleccionar todas las tarjetas
+            document.querySelectorAll('.plan-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            updateCartDisplay();
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío. Selecciona algunos planes primero.');
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            alert(`¡Gracias por tu compra!\n\nTotal: $${total.toLocaleString()} COP\n\nRecibirás un email con los detalles de tus experiencias.`);
+        }
+
+        function updateRecommendations() {
+            const origen = document.getElementById('origen').value;
+            const intereses = document.getElementById('intereses').value;
+            const presupuesto = document.getElementById('presupuesto').value;
+            const tiempo = document.getElementById('tiempo').value;
+
+            const recommendationsList = document.getElementById('recommendations-list');
+            
+            let recommendations = [];
+
+            // Lógica de recomendaciones basada en perfil
+            if (intereses === 'aventura') {
+                recommendations.push('🏔️ Excursiones y Senderismo - Perfecto para aventureros');
+                recommendations.push('🏃 Slackline - Desafía tu equilibrio');
+            } else if (intereses === 'cultura') {
+                recommendations.push('🎭 Cine Clásico - Sumérgete en la cultura cinematográfica');
+                recommendations.push('🎨 Picnic + Cerámica - Arte y naturaleza');
+            } else if (intereses === 'gastronomia') {
+                recommendations.push('🥗 Saludas Gourmet - Descubre sabores únicos');
+                recommendations.push('🚴 Cicloruta gastronómica - Come mientras pedaleas');
+            }
+
+            if (presupuesto === 'bajo') {
+                recommendations.push('🚴 Cicloruta - Económico y divertido');
+                recommendations.push('🎬 Cine al aire libre - Entretenimiento accesible');
+            }
+
+            if (origen === 'extranjero') {
+                recommendations.push('🇨🇴 Planes con guía local incluido');
+                recommendations.push('📱 Traducción disponible en tiempo real');
+            }
+
+            let html = '';
+            recommendations.forEach(rec => {
+                html += `
+                    <div class="recommendation-item">
+                        <span>${rec}</span>
+                        <strong>✨ Sugerido</strong>
+                    </div>
+                `;
+            });
+
+            recommendationsList.innerHTML = html;
+        }
+
+        function findMoreMatches() {
+            const matchesList = document.getElementById('matches-list');
+            const newMatches = [
+                { name: '🇧🇷 Ana (Brasil)', interests: 'Naturaleza, Fotografía' },
+                { name: '🇺🇸 Mike (USA)', interests: 'Deportes extremos, Aventura' },
+                { name: '🇨🇴 Sofía (Bogotá)', interests: 'Arte, Gastronomía' }
+            ];
+
+            newMatches.forEach(match => {
+                const matchDiv = document.createElement('div');
+                matchDiv.className = 'match-card';
+                matchDiv.innerHTML = `
+                    <div>
+                        <strong>${match.name}</strong><br>
+                        <small>Intereses: ${match.interests}</small>
+                    </div>
+                    <button class="btn">💬 Conectar</button>
+                `;
+                matchesList.appendChild(matchDiv);
+            });
+        }
+
+        // Inicializar recomendaciones
+        updateRecommendations();
+    </script>
+</body>
+</html>
