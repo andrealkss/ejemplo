@@ -52,30 +52,41 @@
             display: flex;
             justify-content: center;
             margin-bottom: 30px;
-            background: rgba(202, 53, 53, 0.1);
+            background: #181818ee; /* Negro translúcido */
             border-radius: 15px;
             padding: 5px;
-            backdrop-filter: blur(100px);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            backdrop-filter: blur(8px);
         }
 
         .tab-btn {
             background: none;
             border: none;
-            color: #ff9800; /* Vibrant, complimentary orange */
-            padding: 15px 25px;
+            color: #fff;
+            padding: 15px 32px;
             cursor: pointer;
             border-radius: 10px;
             font-size: 1.25rem;
-            transition: all 0.3s ease;
-            margin: 0 5px;
-            font-weight: 600;
+            transition: all 0.25s cubic-bezier(.4,0,.2,1);
+            margin: 0 7px;
+            font-weight: 700;
             letter-spacing: 0.5px;
+            position: relative;
+            outline: none;
+        }
+
+        .tab-btn:hover, .tab-btn:focus {
+            background: #23272f;
+            color: #ffd700;
+            box-shadow: 0 2px 12px rgba(255,215,0,0.10);
         }
 
         .tab-btn.active {
-            background: #ff9800;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(255,152,0,0.15);
+            background: linear-gradient(90deg, #ffd700 0%, #ff9800 100%);
+            color: #181818;
+            box-shadow: 0 4px 18px rgba(255,215,0,0.18);
+            font-weight: 900;
+            border: 2.5px solid #fff;
         }
 
         .tab-content {
